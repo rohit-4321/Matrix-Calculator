@@ -1,9 +1,6 @@
 package com.rohit.allmath.ui.calculatorscreen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,21 +14,22 @@ import androidx.compose.ui.Modifier
 import com.rohit.allmath.R
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.rohit.allmath.ui.theme.AllMathTheme
 
 @ExperimentalFoundationApi
 @Composable
-fun Home(calculatorViewModel:CalculatorViewModel) {
+fun CalculatorScreen(calculatorViewModel:CalculatorViewModel = viewModel()) {
     Column(modifier = Modifier.fillMaxSize()) {
         ResultArea(calculatorViewModel)
         buttonArea(calculatorViewModel)
-
     }
 }
 
@@ -116,11 +114,11 @@ fun ButtonRow(list : MutableList<ButtonType> , calculatorViewModel: CalculatorVi
         list.forEach{
             InputButtons(
                 buttonType = it,
-                modifier =  Modifier
+                modifier = Modifier
                     .padding(2.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .weight(1f)
-                    .background(Color(0xFFCBD092))
+                    .background(Color(0xff1a1a1a))
                     .fillMaxHeight()
                     .clickable {
                         it.onButtonClick(calculatorViewModel)
@@ -138,24 +136,25 @@ fun InputButtons(buttonType: ButtonType, modifier: Modifier)
         if(buttonType is ButtonType.NumberType)
         {
             Text(modifier = Modifier
-                .align(Alignment.Center), fontSize = 24.sp,text = buttonType.symbol!!)
+                .align(Alignment.Center), fontSize = 30.sp,text = buttonType.symbol!!)
 
         }else if(buttonType is ButtonType.SymbolType)
         {
             Image(modifier = Modifier
                 .align(Alignment.Center)
-                .size(24.dp),
+                .size(20.dp),
+                colorFilter = ColorFilter.tint(Color(0xffECB365)),
                 painter = painterResource(id = buttonType.id!!),
                 contentDescription = null )
         }
 
     }
 }
-@ExperimentalFoundationApi
-@Preview(showBackground = true)
-@Composable
-fun HomePreview() {
-    AllMathTheme {
-        Home(CalculatorViewModel())
-    }
-}
+//@ExperimentalFoundationApi
+//@Preview(showBackground = true)
+//@Composable
+//fun Cal() {
+//    AllMathTheme {
+//        CalculatorScreen(CalculatorViewModel())
+//    }
+//}

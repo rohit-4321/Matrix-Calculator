@@ -1,8 +1,7 @@
-package com.rohit.allmath.ui.navigationscreen.matrix
+package com.rohit.allmath.ui.matrixoperationscreens.matrix
 
 import android.graphics.Point
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -34,7 +33,7 @@ import com.rohit.allmath.R
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @Composable
-fun matrixScreen(viewModel : DeterminantViewModel)
+fun matrixScreen(viewModel : DeterminantViewModel = viewModel())
 {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
@@ -46,10 +45,6 @@ fun matrixScreen(viewModel : DeterminantViewModel)
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(
-            if (isSystemInDarkTheme()) Color(0xFF293349)
-            else Color(0xFFC1C397)
-        )
     )
     {
         Column {
@@ -78,6 +73,9 @@ fun matrixScreen(viewModel : DeterminantViewModel)
                 .padding(horizontal = 8.dp)
                 .background(Color.Transparent)){
                 Button(onClick = { viewModel.calculateResult()},
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(0xffECB365),
+                    contentColor = Color.Black),
                     modifier = Modifier.align(Alignment.Center)
                 ) {
                     Text(text = "Calculate")
@@ -111,7 +109,7 @@ fun editText(viewModel : DeterminantViewModel,
     var textStyle = TextStyle(
         fontSize = 13.sp,
         textDirection = TextDirection.Content,
-        color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+        color = if(isSystemInDarkTheme()) Color.White else Color.Black,
         textAlign = TextAlign.Justify
     )
     var value = rememberSaveable{ mutableStateOf("")}
@@ -122,14 +120,15 @@ fun editText(viewModel : DeterminantViewModel,
     )
     Box(modifier = Modifier
         .width(boxWidth.dp)
-        .background(Color.Red)) {
+        .border(BorderStroke(1.dp, Color.LightGray))) {
 
         BasicTextField(value =  value.value ,
             modifier = Modifier
                 .requiredWidth(boxWidth.dp)
                 .wrapContentWidth(Alignment.End)
-                .background(Color.Green)
-                .height(19.dp)
+                .padding(horizontal = 1.dp)
+                .background(if(isSystemInDarkTheme()) Color(0xff3b3c36) else Color.White)
+                .height(20.dp)
                 .align(Alignment.Center)
             ,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -194,7 +193,7 @@ fun NumberPicker(count : Int ,
             .padding(horizontal = contentPadding.dp)
             .size(46.dp)
             .clip(RoundedCornerShape(100.dp))
-            .background( if(isSystemInDarkTheme())Color(0xFF4e4e4e) else Color(0XFF4ad28e))
+            .background(Color(0xffECB365))
             .clickable(onClick = onDecrement)) {
             Image(modifier  = Modifier
                 .fillMaxSize()
@@ -217,7 +216,7 @@ fun NumberPicker(count : Int ,
             .padding(horizontal = contentPadding.dp)
             .size(46.dp)
             .clip(RoundedCornerShape(100.dp))
-            .background(if(isSystemInDarkTheme())Color(0xFF4e4e4e) else Color(0XFF4ad28e))
+            .background(Color(0xffECB365))
             .clickable(onClick = onIncrement)) {
             Image(modifier  = Modifier
                 .fillMaxSize()
@@ -228,38 +227,6 @@ fun NumberPicker(count : Int ,
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi

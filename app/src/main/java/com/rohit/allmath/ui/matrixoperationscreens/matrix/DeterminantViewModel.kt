@@ -1,11 +1,10 @@
-package com.rohit.allmath.ui.navigationscreen.matrix
+package com.rohit.allmath.ui.matrixoperationscreens.matrix
 
 import android.content.ContentValues.TAG
 import android.graphics.Point
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 class DeterminantViewModel : ViewModel() {

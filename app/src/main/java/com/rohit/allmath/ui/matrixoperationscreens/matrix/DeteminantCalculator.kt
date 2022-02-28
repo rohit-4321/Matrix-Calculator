@@ -1,7 +1,5 @@
-package com.rohit.allmath.ui.navigationscreen.matrix
+package com.rohit.allmath.ui.matrixoperationscreens.matrix
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import org.mariuszgromada.math.mxparser.Expression
 
 fun det(a : MutableList<MutableList<String>>) : String{
