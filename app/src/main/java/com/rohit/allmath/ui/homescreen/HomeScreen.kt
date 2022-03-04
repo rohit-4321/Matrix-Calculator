@@ -68,7 +68,8 @@ fun Alltabs(pageState : PagerState, )
     TabRow(
         selectedTabIndex = pageState.currentPage,
         modifier = Modifier
-            .padding(horizontal = 100.dp, vertical = 5.dp),
+            .padding(horizontal = 100.dp, vertical = 5.dp)
+            .clip(RoundedCornerShape(20.dp)),
         divider = {
             TabRowDefaults.Divider(color = Color.Transparent , thickness = 0.dp )
         },
@@ -79,7 +80,8 @@ fun Alltabs(pageState : PagerState, )
 
         listOfTabs.forEachIndexed { index, res ->
             Tab(selected = pageState.currentPage == index,
-                modifier = Modifier.background(MaterialTheme.colors.background),
+                modifier = Modifier
+                    .background(MaterialTheme.colors.background),
                 onClick = {
                     scope.launch {
                         pageState.scrollToPage(index)

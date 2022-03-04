@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.rohit.allmath.ui.homescreen.HomeScreen
-import com.rohit.allmath.ui.matrixoperationscreens.matrix.matrixScreen
+import com.rohit.allmath.ui.matrixoperationscreens.matrix.MatrixScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
@@ -22,7 +22,7 @@ fun MainNav(navController: NavHostController){
         }
         composable(NavigationDestination.DeterminantOfMatrix.route)
         {
-            matrixScreen()
+            MatrixScreen()
         }
     }
 

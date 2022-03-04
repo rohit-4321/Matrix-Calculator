@@ -21,10 +21,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,7 +37,7 @@ import com.rohit.allmath.R
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @Composable
-fun matrixScreen(viewModel : DeterminantViewModel = viewModel())
+fun MatrixScreen(viewModel : DeterminantViewModel = viewModel())
 {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
@@ -60,7 +64,7 @@ fun matrixScreen(viewModel : DeterminantViewModel = viewModel())
                 .padding(horizontal = 8.dp)
                 .height(screenHeight * 45 / 100)
                 .background(Color.Transparent)){
-                matrixCells(viewModel,
+                MatrixCells(viewModel,
                     modifier = Modifier
                         .align(Alignment.Center),
                     matrixSize = count.value,
@@ -98,53 +102,9 @@ fun matrixScreen(viewModel : DeterminantViewModel = viewModel())
 
 }
 
-@Composable
-fun editText(viewModel : DeterminantViewModel,
-             screenWidth : Int,
-             position : Point
-)
-{
-    val boxWidth  = screenWidth * 13 /100
-
-    var textStyle = TextStyle(
-        fontSize = 13.sp,
-        textDirection = TextDirection.Content,
-        color = if(isSystemInDarkTheme()) Color.White else Color.Black,
-        textAlign = TextAlign.Justify
-    )
-    var value = rememberSaveable{ mutableStateOf("")}
-
-    viewModel.addValue(
-        if(value.value == ""){"0"}else value.value,
-        position = position
-    )
-    Box(modifier = Modifier
-        .width(boxWidth.dp)
-        .border(BorderStroke(1.dp, Color.LightGray))) {
-
-        BasicTextField(value =  value.value ,
-            modifier = Modifier
-                .requiredWidth(boxWidth.dp)
-                .wrapContentWidth(Alignment.End)
-                .padding(horizontal = 1.dp)
-                .background(if(isSystemInDarkTheme()) Color(0xff3b3c36) else Color.White)
-                .height(20.dp)
-                .align(Alignment.Center)
-            ,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            ,
-            textStyle = textStyle,
-            singleLine = true,
-            onValueChange ={
-                value.value = it
-            }
-        )
-    }
-}
-
 @ExperimentalFoundationApi
 @Composable
-fun matrixCells(viewModel : DeterminantViewModel,
+fun MatrixCells(viewModel : DeterminantViewModel,
                 modifier : Modifier,
                 matrixSize : Int ,
                 screenWidth: Int)
@@ -158,11 +118,11 @@ fun matrixCells(viewModel : DeterminantViewModel,
                     item {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            for(i in 0 until matrixSize) {
+                            for(i in -1 until matrixSize) {
                                 Row(modifier = Modifier,
                                     horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                                    for (j in 0 until matrixSize) {
-                                        editText(viewModel ,screenWidth , Point(i,j))
+                                    for (j in -1 until matrixSize) {
+                                        EditText(viewModel ,screenWidth , Point(i,j))
                                     }
                                 }
                             }
@@ -176,6 +136,156 @@ fun matrixCells(viewModel : DeterminantViewModel,
 
 }
 
+@Composable
+fun EditText(viewModel : DeterminantViewModel,
+             screenWidth : Int,
+             position : Point
+)
+{
+    val boxWidth  = screenWidth * 13 /100
+
+    var textStyle = TextStyle(
+        fontSize = 13.sp,
+        textDirection = TextDirection.Content,
+        color = if(isSystemInDarkTheme()) Color.White else Color.Black,
+        textAlign = TextAlign.Justify
+    )
+    Box(modifier = Modifier
+        .size(boxWidth.dp, 25.dp)) {
+
+        if(position.x == -1 || position.y == -1)
+        {
+            MatrixCellHeading(position = position,
+                Modifier
+                    .width(boxWidth.dp)
+                    .border(BorderStroke(1.dp, Color.LightGray))
+                    .size(boxWidth.dp, 25.dp)
+                    .background(if (isSystemInDarkTheme()) Color(0xff3b3c36) else Color.White)
+            )
+
+        }else
+        {
+            InputtextField(viewModel = viewModel,
+                textStyle = textStyle,
+                position =position,
+                boxWidth =boxWidth,
+                modifier = Modifier
+                    .width(boxWidth.dp)
+                    .border(BorderStroke(1.dp, Color.LightGray))
+                    .align(Alignment.Center)
+            )
+
+        }
+
+
+
+    }
+}
+@Composable
+fun MatrixCellHeading(position: Point, modifier : Modifier)
+{
+    val subscript = SpanStyle(
+        baselineShift = BaselineShift.Subscript,
+        fontSize = 11.sp,
+        color = if(isSystemInDarkTheme()) Color.White else Color.Black
+    )
+
+    Box(modifier = modifier
+    )
+    {
+        if(position.x == -1 && position.y == -1)
+        {
+            HeadingText(
+                textModifier = Modifier.align(Alignment.Center),
+                text = "X",
+                subscriptText = "0",
+                subscript = subscript
+            )
+        }else if(position.x == -1 && position.y > -1 )
+        {
+            HeadingText(
+                textModifier = Modifier.align(Alignment.Center),
+                text = "C",
+                subscriptText = (position.y+1).toString(),
+                subscript = subscript
+            )
+        }else if(position.y == -1 && position.x > -1 )
+        {
+            HeadingText(
+                textModifier = Modifier.align(Alignment.Center),
+                text = "R",
+                subscriptText = (position.x+1).toString(),
+                subscript = subscript
+            )
+        }
+
+
+
+    }
+}
+@Composable
+fun HeadingText(textModifier : Modifier,
+                text : String,
+                subscriptText : String,
+                subscript : SpanStyle)
+{
+    Text(
+        text =  buildAnnotatedString {
+            append(text)
+            withStyle(subscript)
+            {
+                append(subscriptText)
+            }
+        },
+        modifier = textModifier,
+        fontSize = 12.sp,
+        color = if(isSystemInDarkTheme()) Color.White else Color.Black
+    )
+
+}
+
+
+
+
+
+
+@Composable
+fun InputtextField(viewModel : DeterminantViewModel,
+                   textStyle : TextStyle,
+                   position : Point,
+                   boxWidth : Int,
+                   modifier : Modifier
+){
+
+    var value = rememberSaveable{ mutableStateOf("")}
+
+    viewModel.addValue(
+        if(value.value == ""){"0"}else value.value,
+        position = position
+    )
+    Box(modifier = modifier)
+    {
+        BasicTextField(value =  value.value ,
+            modifier = Modifier
+                .requiredWidth(boxWidth.dp)
+                .wrapContentWidth(Alignment.End)
+                .padding(horizontal = 1.dp)
+                .background(if (isSystemInDarkTheme()) Color(0xff3b3c36) else Color.White)
+                .height(20.dp)
+            ,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            ,
+            textStyle = textStyle,
+            singleLine = true,
+            onValueChange ={
+                value.value = it
+            }
+        )
+
+    }
+
+
+}
 
 
 
@@ -233,5 +343,5 @@ fun NumberPicker(count : Int ,
 @Composable
 @Preview
 fun PreviewMatrixScreen(){
-    matrixScreen(viewModel())
+    MatrixScreen(viewModel())
 }
