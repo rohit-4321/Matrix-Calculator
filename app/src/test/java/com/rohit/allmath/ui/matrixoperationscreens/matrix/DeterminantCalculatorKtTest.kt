@@ -39,6 +39,12 @@ internal class DeterminantCalculatorKtTest{
                         mutableListOf("6","7","8"),
                         mutableListOf("1","11","32"),
                     ) , "-434.0"
+                ),
+                Arguments.of(
+                    mutableListOf(
+                        mutableListOf("-1","-5"),
+                        mutableListOf("-6","-6"),
+                    ) , "-24.0"
                 )
             )
         }

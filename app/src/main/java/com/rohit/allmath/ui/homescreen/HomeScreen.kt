@@ -110,43 +110,74 @@ fun HomeScreenContent(navController: NavHostController)
             .padding(vertical = 9.dp, horizontal = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(20.dp))
-                .border(width = 2.dp, Color(0xff505050), RoundedCornerShape(20.dp))
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(
-                            Color(0xff150610),
-                            Color(0xff1A0814),
-                            Color(0xff1D0D18)
-//                            Color(0xff25131F),
-//                            Color(0xff391B30),
-//                            Color(0xf25A2749)
-                        )
-                    )
-                )
-                .clickable {
+            Column {
+                TopicButton( onClick = {
                     navController.navigate(NavigationDestination.DeterminantOfMatrix.route) {
                         popUpTo(NavigationDestination.Home.route) {
                             inclusive = false
                         }
                     }
-                }) {
-                Text(text = "1. Determinant of a Matrix" ,
+                })
+                {
+                    Text(text = "1. Determinant of a Matrix" ,
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp, vertical = 14.dp)
+                        ,
+                        fontSize = 24.sp,
+                        color = Color(0xffc0c0c0)
+                    )
+
+                }
+            }
+            TopicButton(onClick = {
+                navController.navigate(NavigationDestination.InverseMatrixScreen.route) {
+                    popUpTo(NavigationDestination.Home.route) {
+                        inclusive = false
+                    }
+                }
+
+            }) {
+                Text(text = "2. Inverse  of a Matrix" ,
                     modifier = Modifier
                         .padding(horizontal = 20.dp, vertical = 14.dp)
-                        ,
+                    ,
                     fontSize = 24.sp,
                     color = Color(0xffc0c0c0)
                 )
+
             }
-
-
-
         }
 
+    }
+
+}
+@Composable
+fun TopicButton(
+    onClick : ()-> Unit,
+     display : @Composable ()->Unit
+)
+{
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 12.dp , bottom = 12.dp)
+        .clip(RoundedCornerShape(20.dp))
+        .border(width = 2.dp, Color(0xff505050), RoundedCornerShape(20.dp))
+
+        .background(
+            brush = Brush.horizontalGradient(
+                colors = listOf(
+                    Color(0xff150610),
+                    Color(0xff1A0814),
+                    Color(0xff1D0D18)
+
+                )
+            )
+        )
+        .clickable {
+            onClick()
+
+        }) {
+        display()
     }
 
 }

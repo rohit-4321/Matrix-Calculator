@@ -16,13 +16,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-import com.rohit.allmath.ui.theme.AllMathTheme
 
 @ExperimentalFoundationApi
 @Composable
@@ -37,6 +37,16 @@ fun CalculatorScreen(calculatorViewModel:CalculatorViewModel = viewModel()) {
 @Composable
 fun ResultArea(calculatorViewModel:CalculatorViewModel)
 {
+    val textStyleForFocused =  TextStyle(
+        fontSize = 35.sp,
+        color = Color.White
+    )
+    val textStyleForNonFocused = TextStyle(
+        fontSize = 22.sp,
+        color = Color.Gray
+    )
+    val resultIsFocused = calculatorViewModel.resultIsOnFocused.observeAsState()
+    val expressionIsOnFocused = calculatorViewModel.expressionIsFocused.observeAsState()
     val expression : String by calculatorViewModel.expression.observeAsState("ty")
     val result : String by calculatorViewModel.result.observeAsState("")
     Box(modifier = Modifier
@@ -44,8 +54,12 @@ fun ResultArea(calculatorViewModel:CalculatorViewModel)
         .height(380.dp)
         .padding(9.dp)) {
         Column(modifier = Modifier.align(Alignment.BottomEnd), horizontalAlignment = Alignment.End) {
-            Text(fontSize = 30.sp,text =expression, )
-            Text(fontSize  = 32.sp , text = result)
+            Text(text =expression,
+                style = if(expressionIsOnFocused.value == true) textStyleForFocused
+                else textStyleForNonFocused )
+            Text(text = result ,
+                style = if(resultIsFocused.value == true) textStyleForFocused
+                else textStyleForNonFocused )
         }
 
     }
@@ -56,31 +70,31 @@ fun ResultArea(calculatorViewModel:CalculatorViewModel)
 fun buttonArea(calculatorViewModel: CalculatorViewModel)
 {
     val keyBoardList : MutableList<MutableList<ButtonType>> = mutableListOf(
-        mutableListOf(ButtonType.SymbolType(R.drawable.clearall,null),
-            ButtonType.SymbolType(R.drawable.clear,null),
-            ButtonType.SymbolType(R.drawable.percent,"%"),
-            ButtonType.SymbolType(R.drawable.divide,"/")
+        mutableListOf(SymbolType(R.drawable.clearall,null),
+            SymbolType(R.drawable.clear,null),
+            SymbolType(R.drawable.percent,"%"),
+            SymbolType(R.drawable.divide,"/")
         ),
-        mutableListOf(ButtonType.NumberType("7"),
-            ButtonType.NumberType("8"),
-            ButtonType.NumberType("9"),
-            ButtonType.SymbolType(R.drawable.multiply,"*")
+        mutableListOf(NumberType("7"),
+            NumberType("8"),
+            NumberType("9"),
+            SymbolType(R.drawable.multiply,"*")
         ),
-        mutableListOf(ButtonType.NumberType("4"),
-            ButtonType.NumberType("5"),
-            ButtonType.NumberType("6"),
-            ButtonType.SymbolType(R.drawable.minus,"-")
+        mutableListOf(NumberType("4"),
+            NumberType("5"),
+            NumberType("6"),
+            SymbolType(R.drawable.minus,"-")
         ),
-        mutableListOf(ButtonType.NumberType("1"),
-            ButtonType.NumberType("2"),
-            ButtonType.NumberType("3"),
-            ButtonType.SymbolType(R.drawable.plus,"+")
+        mutableListOf(NumberType("1"),
+            NumberType("2"),
+            NumberType("3"),
+            SymbolType(R.drawable.plus,"+")
 
         ),
-        mutableListOf(ButtonType.SymbolType(R.drawable.clearall,null),
-            ButtonType.NumberType("0"),
-            ButtonType.SymbolType(R.drawable.dot , "."),
-            ButtonType.SymbolType(R.drawable.equal , null)
+        mutableListOf(SymbolType(R.drawable.clearall,null),
+            NumberType("0"),
+            SymbolType(R.drawable.dot , "."),
+            SymbolType(R.drawable.equal , null)
         )
     )
 
@@ -133,12 +147,12 @@ fun InputButtons(buttonType: ButtonType, modifier: Modifier)
 {
     Box(modifier = modifier
     ){
-        if(buttonType is ButtonType.NumberType)
+        if(buttonType is NumberType)
         {
             Text(modifier = Modifier
                 .align(Alignment.Center), fontSize = 30.sp,text = buttonType.symbol!!)
 
-        }else if(buttonType is ButtonType.SymbolType)
+        }else if(buttonType is SymbolType)
         {
             Image(modifier = Modifier
                 .align(Alignment.Center)

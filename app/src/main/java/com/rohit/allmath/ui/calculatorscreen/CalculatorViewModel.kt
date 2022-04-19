@@ -14,19 +14,34 @@ import com.rohit.allmath.R
 import org.mariuszgromada.math.mxparser.Expression
 
 class CalculatorViewModel : ViewModel() {
-    private val _expression  = MutableLiveData("")
+
+    // For taking input from the user...
+    private val _expression  = MutableLiveData("0")
     val expression : LiveData<String> = _expression
 
+    // calculating result every time after user change in expression.....
     private val _result = Transformations.map(_expression){
         calculateExpression(it)
     }
+
+
+    private val _expressionIsFocused = MutableLiveData<Boolean>(true)
+    val expressionIsFocused : LiveData<Boolean> = _expressionIsFocused
+
+    private val _resultIsOnFocused = MutableLiveData(false)
+    val resultIsOnFocused : LiveData<Boolean> = _resultIsOnFocused
+
+
+
     val result :LiveData<String> = _result
+
 
     private fun calculateExpression(expression : String) : String{
         val exp = Expression(expression)
 
         return exp.calculate().toString()
     }
+
 
     fun addExpression(value : String) {
         _expression.postValue(_expression.value + value)
@@ -37,6 +52,8 @@ class CalculatorViewModel : ViewModel() {
 
     fun equalButtonClicked()
     {
+        _expressionIsFocused.postValue(false)
+        _resultIsOnFocused.postValue(true)
         Log.i(TAG, "equalButtonClicked: Button Clicked............")
     }
 
